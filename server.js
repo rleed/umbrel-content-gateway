@@ -53,9 +53,9 @@ app.get('/api/v1/lno', (req, res) => {
     id: req.query.id
   }
 
-  const cert = cert && fs.readFileSync(CLNREST_CERT)
-  const ca   = ca   && fs.readFileSync(CLNREST_CA)
-  const key  = key  && fs.readFileSync(CLNREST_KEY)
+  const cert = CLNREST_CERT && fs.readFileSync(CLNREST_CERT)
+  const ca   = CLNREST_CA   && fs.readFileSync(CLNREST_CA)
+  const key  = CLNREST_KEY  && fs.readFileSync(CLNREST_KEY)
 
   var data = "amount=any"
   var options = {
