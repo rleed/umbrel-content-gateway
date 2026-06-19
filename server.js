@@ -88,6 +88,11 @@ console.error(buf)
     })
   })
   requ.on('error', e => {
+     if (e instanceof AggregateError) {
+            console.error(e.name);    // "AggregateError"
+            console.error(e.message); // "All promises were rejected"
+            console.error(e.errors);   // Array of individual errors
+        }
     result.err = `${e}`
     res.send(JSON.stringify(result))
     res.end();
