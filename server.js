@@ -19,7 +19,9 @@ import('lowdb').then(lowdb => {
 import('@nostr/tools/pure').then(nostr_tools_pure => {
   const { getEventHash } = nostr_tools_pure
 
-const URL = process.env.URL
+const CLNREST_HOST = process.env.CLNREST_HOST
+const CLNREST_PORT = process.env.CLNREST_PORT
+const CLNREST_RUNE = process.env.CLNREST_RUNE
 
 const options = {
   port: {
@@ -40,13 +42,46 @@ var app_options = {}
 
 
 app.get('/api/v1/lno', (req, res) => {
-  const content = JSON.stringify({
+
+  const result = {
     test: "value",
-    url: `${URL}`,
+    host: `${CLNREST_HOST}`,
+    port: `${CLNREST_PORT}`,
     id: req.query.id
+  }
+
+  var data = "amount=any"
+  var options = {
+    hostname: `${CLNREST_HOST}`,
+    port: CLNREST_PORT,
+    path: '/v1/offer',
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'Content-Length': data.length
+      'Rune': `${CLNREST_RUNE}`
+    }
+  }
+  var requ = https.request(options, resp => {
+    result.statusCode = resp.statusCode
+    result.headers = resp.headers
+    let buf = ''
+    resp.on('data', chunk => {
+      buf += chunk
+    })
+    resp.on('end', () => {
+      result.response = buf
+      res.send(JSON.stringify(result))
+      res.end();
+    })
   })
-  res.send(content)
-  res.end();
+  requ.on('error', e => {
+    result.err = e
+    res.send(JSON.stringify(result))
+    res.end();
+  })
+  requ.write(data)
+  requ.end()
 });
 
 
