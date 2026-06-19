@@ -22,6 +22,9 @@ import('@nostr/tools/pure').then(nostr_tools_pure => {
 const CLNREST_HOST = process.env.CLNREST_HOST
 const CLNREST_PORT = process.env.CLNREST_PORT
 const CLNREST_RUNE = process.env.CLNREST_RUNE
+const CLNREST_CERT = process.env.CLNREST_CERT
+const CLNREST_CA   = process.env.CLNREST_CA
+const CLNREST_KEY  = process.env.CLNREST_KEY
 
 const options = {
   port: {
@@ -50,6 +53,10 @@ app.get('/api/v1/lno', (req, res) => {
     id: req.query.id
   }
 
+  const cert = fs.readFileSync(CLNREST_CERT)
+  const ca   = fs.readFileSync(CLNREST_CA)
+  const key  = fs.readFileSync(CLNREST_KEY)
+
   var data = "amount=any"
   var options = {
     hostname: `${CLNREST_HOST}`,
@@ -58,9 +65,12 @@ app.get('/api/v1/lno', (req, res) => {
     method: 'POST',
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
-      'Content-Length': data.length
+      'Content-Length': data.length,
       'Rune': `${CLNREST_RUNE}`
-    }
+    },
+    cert,
+    ca,
+    key
   }
   var requ = https.request(options, resp => {
     result.statusCode = resp.statusCode
