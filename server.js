@@ -614,7 +614,7 @@ app.get('/:path*', (req, res) => {
 });
 */
 
-app.get('/api/v1/lno?id=:id', (req, res) => {
+app.get('/api/v1/lno', (req, res) => {
   const content = JSON.stringify({
     test: "value",
     id: req.query.id
