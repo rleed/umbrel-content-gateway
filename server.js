@@ -75,13 +75,14 @@ app.get('/api/v1/lno', (req, res) => {
   }
   var requ = https.request(options, resp => {
     result.statusCode = resp.statusCode
-    result.headers = resp.headers
+    result.headers = 'resp.headers'
     let buf = ''
     resp.on('data', chunk => {
       buf += chunk
     })
     resp.on('end', () => {
-      result.response = buf
+      result.response = 'buf'
+console.error(buf)
       res.send(JSON.stringify(result))
       res.end();
     })
