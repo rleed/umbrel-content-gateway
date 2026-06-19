@@ -48,10 +48,10 @@ app.get('/api/v1/lno', (req, res) => {
 
   const result = {
     test: "value",
-    cwd: process.cwd(),
+    cwd: `${process.cwd()}`,
     host: `${CLNREST_HOST}`,
     port: `${CLNREST_PORT}`,
-    id: req.query.id
+    id: `${req.query.id}`
   }
 
   const cert = CLNREST_CERT && fs.readFileSync(CLNREST_CERT)
@@ -74,7 +74,7 @@ app.get('/api/v1/lno', (req, res) => {
     key
   }
   var requ = https.request(options, resp => {
-    result.statusCode = resp.statusCode
+    result.statusCode = `${resp.statusCode}`
     result.headers = 'resp.headers'
     let buf = ''
     resp.on('data', chunk => {
@@ -88,7 +88,7 @@ console.error(buf)
     })
   })
   requ.on('error', e => {
-    result.err = e
+    result.err = `${e}`
     res.send(JSON.stringify(result))
     res.end();
   })
