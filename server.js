@@ -10,6 +10,7 @@ const qrlib = require('qrcode')
 const { Verifier } = require('bip322-js')
 const { bech32 } = require('bech32')
 const { schnorr } = require('@noble/curves/secp256k1')
+const https = require('https')
 
 import('lowdb/node').then(lowdb_node => {
   JSONFile = lowdb_node.JSONFile
@@ -41,7 +42,7 @@ var app_options = {}
 app.get('/api/v1/lno', (req, res) => {
   const content = JSON.stringify({
     test: "value",
-    url: `$URL`,
+    url: `${URL}`,
     id: req.query.id
   })
   res.send(content)
